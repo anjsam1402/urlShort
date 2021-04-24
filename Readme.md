@@ -32,8 +32,8 @@ Once the database migration is finished, the docker configuration will automatic
 The `mongo-express` serves a web-based admin interface for Mongodb, exposed at port `8081`.
 
 ```
-* web service : 0.0.0.0:8000
-* mongo admin : 0.0.0.0:8081
+* web service : http://0.0.0.0:8000/
+* mongo admin : http://0.0.0.0:8081/
 ```
 
 ### Without Docker
@@ -82,5 +82,5 @@ $ python manage.py runserver
 ```
 
 ## License
-
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
