@@ -1,0 +1,78 @@
+version: '3.9'
+
+volumes:
+  data-db:
+
+services:
+  mongodb:
+    image: mongo:4.4
+    restart: always
+    container_name: 'mongo_container'
+    volumes:
+      - ./data-db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+      MONGO_INITDB_DATABASE: urlShort
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express:0.54
+    restart: always
+    container_name: 'mongo_express_container'
+    ports:
+      - 8081:8081
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongoadmin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+  web:
+    image: app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 'django_container'
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/trim_url
+    ports:
+      - 8000:8000
+    links:
+      - mongodb
+    depends_on:
+      - migration
+
+  migration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app
+    container_name: 'django_migrate'
+    command: python manage.py migrate
+    volumes:
+      - .:/trim_url
+    links:
+      - mongodb
+    depends_on:
+      - make_migrations
+   
+  make_migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app
+    container_name: 'django_makemigrations'
+    command: python manage.py makemigrations
+    volumes:
+      - .:/trim_url
+    links:
+      - mongodb
+    depends_on:
+      - mongodb

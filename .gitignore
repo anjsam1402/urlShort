@@ -1,0 +1,7 @@
+Procfile
+./data-db/*
+./virtual
+./.vscode
+./urlShort/settings_ref.py
+db.sqlite3
+Notes.txt
