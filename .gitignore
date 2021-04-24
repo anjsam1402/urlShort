@@ -2,7 +2,8 @@ Procfile
 data-db/*
 !data-db/.gitkeep 
 virtual
-.vscode/
+.vscode/*
+.vscode
 urlShort/settings_ref.py
 db.sqlite3
 Notes.txt
